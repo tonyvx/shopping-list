@@ -84,7 +84,7 @@ export default function App() {
 
   return (
     <PaperProvider theme={theme}>
-      <ShoppingList list={list} />
+      <ShoppingList list={list} style={{ overflow: "hidden" }} />
     </PaperProvider>
   );
 }
