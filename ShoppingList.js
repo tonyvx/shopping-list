@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { Image, View } from "react-native";
 import {
   Appbar,
   Button,
@@ -8,6 +8,7 @@ import {
   List,
   Searchbar,
 } from "react-native-paper";
+import { update } from "./db";
 
 export const ShoppingList = ({ list }) => {
   const [selected, setSelected] = useState([]);
@@ -18,6 +19,28 @@ export const ShoppingList = ({ list }) => {
     selected.includes(id)
       ? setSelected(selected.filter((tid) => tid !== id))
       : setSelected([...selected, id]);
+
+  const handleFileRead = async (id,event) => {
+    const file = event.target.files[0];
+    const base64 = await convertBase64(file);
+    await update(
+      "UPDATE SHOPPING_LIST SET image='" + base64 + "' WHERE id='" + id + "'", id
+    );
+    console.log(base64);
+  };
+
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
 
   return (
     <View style={{ margin: 16 }}>
@@ -62,12 +85,26 @@ export const ShoppingList = ({ list }) => {
                           : "unchecked"
                       }
                     />
+                    <img src={i.image} width="30px" height="30px" />
                     <List.Item
                       key={i.id}
                       title={i.title}
                       description={i.notes}
-                      left={(props) => <List.Icon {...props} icon="folder" />}
+                      left={(props) => i.image ? <Image source={{uri: i.image}} />:<List.Icon {...props} icon="folder" />}
                     ></List.Item>
+                    <input
+                      id="originalFileName"
+                      type="file"
+                      inputProps={{
+                        accept: "image/*",
+                      }}
+                      required
+                      label="Document"
+                      name="originalFileName"
+                      onChange={(e) => handleFileRead(i.id,e)}
+                      size="small"
+                      variant="standard"
+                    />
                   </View>
                 ))}
               </View>

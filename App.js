@@ -12,6 +12,7 @@ const theme = {
     ...DefaultTheme.colors,
     primary: "#3498db",
     accent: "#f1c40f",
+    text:"#ED5151"
   },
 };
 
@@ -29,29 +30,29 @@ export default function App() {
   React.useEffect(() => {
     db.transaction(async function (txn) {
       // Drop the table if it exists
-      txn.executeSql("DROP TABLE IF EXISTS SHOPPING_LIST", []);
+      // txn.executeSql("DROP TABLE IF EXISTS SHOPPING_LIST", []);
 
       // Create the table and define the properties of the columns
       txn.executeSql(
-        "CREATE TABLE IF NOT EXISTS SHOPPING_LIST(id VARCHAR(36) PRIMARY KEY NOT NULL, title VARCHAR(30), notes VARCHAR(100),photo_url VARCHAR(30), position INTEGER, active INTEGER,completed INTEGER, shopping_category_id VARCHAR(30))",
+        "CREATE TABLE IF NOT EXISTS SHOPPING_LIST(id VARCHAR(36) PRIMARY KEY NOT NULL, title VARCHAR(30), notes VARCHAR(100),photo_url VARCHAR(30), position INTEGER, active INTEGER,completed INTEGER, shopping_category_id VARCHAR(30), image BLOB)",
         []
       );
 
-      shoppingList.shopping_list_items.forEach((item) =>
-        txn.executeSql(
-          "INSERT INTO SHOPPING_LIST (id,title,notes, photo_url, position,active, completed, shopping_category_id) VALUES (:id,:title,:notes, :photo_url, :position,:active, :completed, :shopping_category_id)",
-          [
-            uuidv4(),
-            item.title,
-            item.notes,
-            item.photo_url,
-            item.position,
-            item.active ? 1 : 0,
-            item.completed ? 1 : 0,
-            item.shopping_category_id,
-          ]
-        )
-      );
+      // shoppingList.shopping_list_items.forEach((item) =>
+      //   txn.executeSql(
+      //     "INSERT INTO SHOPPING_LIST (id,title,notes, photo_url, position,active, completed, shopping_category_id) VALUES (:id,:title,:notes, :photo_url, :position,:active, :completed, :shopping_category_id)",
+      //     [
+      //       uuidv4(),
+      //       item.title,
+      //       item.notes,
+      //       item.photo_url,
+      //       item.position,
+      //       item.active ? 1 : 0,
+      //       item.completed ? 1 : 0,
+      //       item.shopping_category_id,
+      //     ]
+      //   )
+      // );
 
       const response = await new Promise((resolve, reject) =>
         txn.executeSql("SELECT * FROM `SHOPPING_LIST`", [], function (tx, res) {
