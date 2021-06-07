@@ -52,7 +52,7 @@ export const ShoppingList = ({ list }) => {
         style={{ width: "80%", alignSelf: "center", margin: 8 }}
       />
       <ShowSelectedToggle {...{ setShowSelected, showSelected }} />
-      <ScrollView>
+      <ScrollView style={{ height: "70%" }}>
         {list &&
           list
             .filter(
@@ -69,7 +69,12 @@ export const ShoppingList = ({ list }) => {
                   showSelected,
                   selected
                 ).map((i) => (
-                  <ShoppingItem item={i} check={check} selected={selected} />
+                  <ShoppingItem
+                    key={i.id}
+                    item={i}
+                    check={check}
+                    selected={selected}
+                  />
                 ))}
               </View>
             ))}
