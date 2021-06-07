@@ -12,7 +12,7 @@ const theme = {
     ...DefaultTheme.colors,
     primary: "#3498db",
     accent: "#f1c40f",
-    text:"#ED5151"
+    background: "#000",
   },
 };
 
@@ -40,7 +40,7 @@ export default function App() {
 
       // shoppingList.shopping_list_items.forEach((item) =>
       //   txn.executeSql(
-      //     "INSERT INTO SHOPPING_LIST (id,title,notes, photo_url, position,active, completed, shopping_category_id) VALUES (:id,:title,:notes, :photo_url, :position,:active, :completed, :shopping_category_id)",
+      //     "INSERT INTO SHOPPING_LIST (id,title,notes, photo_url, position,active, completed, shopping_category_id, image) VALUES (:id,:title,:notes, :photo_url, :position,:active, :completed, :shopping_category_id, :image)",
       //     [
       //       uuidv4(),
       //       item.title,
@@ -50,6 +50,7 @@ export default function App() {
       //       item.active ? 1 : 0,
       //       item.completed ? 1 : 0,
       //       item.shopping_category_id,
+      //       item.image
       //     ]
       //   )
       // );
@@ -85,7 +86,7 @@ export default function App() {
 
   return (
     <PaperProvider theme={theme}>
-      <ShoppingList list={list} style={{ overflow: "hidden" }} />
+      <ShoppingList list={list} />
     </PaperProvider>
   );
 }

@@ -1,14 +1,23 @@
+import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
-import { Image, View } from "react-native";
-import {
-  Appbar,
-  Button,
-  Checkbox,
-  Chip,
-  List,
-  Searchbar,
-} from "react-native-paper";
-import { update } from "./db";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Appbar, Chip, Searchbar } from "react-native-paper";
+import { ShoppingItem } from "./ShoppingItem";
+import { ShowSelectedToggle } from "./ShowSelectedToggle";
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: 50,
+  },
+  tinyLogo: {
+    width: 50,
+    height: 50,
+  },
+  logo: {
+    width: 30,
+    height: 58,
+  },
+});
 
 export const ShoppingList = ({ list }) => {
   const [selected, setSelected] = useState([]);
@@ -20,27 +29,17 @@ export const ShoppingList = ({ list }) => {
       ? setSelected(selected.filter((tid) => tid !== id))
       : setSelected([...selected, id]);
 
-  const handleFileRead = async (id,event) => {
-    const file = event.target.files[0];
-    const base64 = await convertBase64(file);
-    await update(
-      "UPDATE SHOPPING_LIST SET image='" + base64 + "' WHERE id='" + id + "'", id
-    );
-    console.log(base64);
-  };
-
-  const convertBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  };
+  React.useEffect(() => {
+    (async () => {
+      // if (Platform.OS !== "web") {
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+      // }
+    })();
+  }, []);
 
   return (
     <View style={{ margin: 16 }}>
@@ -52,10 +51,8 @@ export const ShoppingList = ({ list }) => {
         value={searchQuery}
         style={{ width: "80%", alignSelf: "center", margin: 8 }}
       />
-      <Button onPress={() => setShowSelected(!showSelected)} icon="camera">
-        Show Selected
-      </Button>
-      <View style={{ overflow: "auto" }}>
+      <ShowSelectedToggle {...{ setShowSelected, showSelected }} />
+      <ScrollView>
         {list &&
           list
             .filter(
@@ -72,44 +69,11 @@ export const ShoppingList = ({ list }) => {
                   showSelected,
                   selected
                 ).map((i) => (
-                  <View
-                    style={{ display: "flex", flexDirection: "row" }}
-                    key={i.id}
-                  >
-                    <Checkbox
-                      style={{ margin: 4 }}
-                      onPress={check(i.id)}
-                      status={
-                        selected && selected.includes(i.id)
-                          ? "checked"
-                          : "unchecked"
-                      }
-                    />
-                    <img src={i.image} width="30px" height="30px" />
-                    <List.Item
-                      key={i.id}
-                      title={i.title}
-                      description={i.notes}
-                      left={(props) => i.image ? <Image source={{uri: i.image}} />:<List.Icon {...props} icon="folder" />}
-                    ></List.Item>
-                    <input
-                      id="originalFileName"
-                      type="file"
-                      inputProps={{
-                        accept: "image/*",
-                      }}
-                      required
-                      label="Document"
-                      name="originalFileName"
-                      onChange={(e) => handleFileRead(i.id,e)}
-                      size="small"
-                      variant="standard"
-                    />
-                  </View>
+                  <ShoppingItem item={i} check={check} selected={selected} />
                 ))}
               </View>
             ))}
-      </View>
+      </ScrollView>
     </View>
   );
 };
