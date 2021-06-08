@@ -2,6 +2,7 @@ import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Appbar, Chip, Searchbar } from "react-native-paper";
+import { AppContext, setList } from "../data/AppContext";
 import { ShoppingItem } from "./ShoppingItem";
 import { ShowSelectedToggle } from "./ShowSelectedToggle";
 
@@ -19,10 +20,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export const ShoppingList = ({ list }) => {
+export const ShoppingList = () => {
   const [selected, setSelected] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showSelected, setShowSelected] = useState(false);
+
+  const { dispatch, context } = React.useContext(AppContext);
+  const { list } = context;
 
   const check = (id) => () =>
     selected.includes(id)
@@ -30,15 +34,17 @@ export const ShoppingList = ({ list }) => {
       : setSelected([...selected, id]);
 
   React.useEffect(() => {
-    (async () => {
-      // if (Platform.OS !== "web") {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
-      }
-      // }
-    })();
+    // (async () => {
+    //   // if (Platform.OS !== "web") {
+    //   const { status } =
+    //     await ImagePicker.requestMediaLibraryPermissionsAsync();
+    //   if (status !== "granted") {
+    //     alert("Sorry, we need camera roll permissions to make this work!");
+    //   }
+    //   // }
+    // })();
+
+    setList(dispatch);
   }, []);
 
   return (

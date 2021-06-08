@@ -2,18 +2,22 @@ import * as ImagePicker from "expo-image-picker";
 import React from "react";
 import { Button } from "react-native-paper";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
-import { update } from "./db";
+import { update } from "../data/db";
+import { AppContext, updateList } from "../data/AppContext";
 
 export const UploadImageButton = ({ item }) => {
-  const handleFileRead = async (id, event) => {
+  const { dispatch, context } = React.useContext(AppContext);
+  const handleFileRead = (event) => {
     // const file = event.target.files[0];
     // const base64 = await convertBase64(file);
-    const base64 = event.uri;
-    await update(
-      "UPDATE SHOPPING_LIST SET image='" + base64 + "' WHERE id='" + id + "'",
-      id
-    );
-    console.log(base64);
+    // const base64 = event.uri;
+    // await update(
+    //   "UPDATE SHOPPING_LIST SET image='" + base64 + "' WHERE id='" + id + "'",
+    //   id
+    // );
+
+    updateList(dispatch, { ...item, image: event.uri });
+    console.log(event.uri);
   };
 
   const convertBase64 = (file) => {
@@ -42,7 +46,7 @@ export const UploadImageButton = ({ item }) => {
     res.errorCode && console.log("error ", res.errorCode);
     res.errorMessage && console.log("error ", res.errorMessage);
     res.assets && console.log("assets ", res.assets[0]);
-    handleFileRead(id, res);
+    handleFileRead(res);
   };
   return (
     <Button onPress={uploadImage(item.id)} style={{ height: 48 }}>
