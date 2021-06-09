@@ -2,7 +2,7 @@ import * as SQLite from "expo-sqlite";
 // import React, { useState } from "react";
 // import { AppContext, setSnackBar } from "./AppContext";
 
-export const update = async (sql, id) => {
+export const update = async (sql, data = []) => {
   const response = await new Promise((resolve, reject) => {
     const db = SQLite.openDatabase("myDatabaseName.db");
 
@@ -11,7 +11,7 @@ export const update = async (sql, id) => {
 
       txn.executeSql(
         sql,
-        [],
+        data,
         function (tx, res) {
           console.log(res);
 

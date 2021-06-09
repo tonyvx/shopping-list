@@ -1,8 +1,14 @@
 import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Appbar, Chip, Snackbar } from "react-native-paper";
-import { AppContext, clearSnackBar, setList } from "../data/AppContext";
+import { Appbar, Button, Chip, Snackbar } from "react-native-paper";
+import {
+  AppContext,
+  clearSnackBar,
+  setList,
+  showItem,
+  updateItem,
+} from "../data/AppContext";
 import { ShoppingItem } from "./ShoppingItem";
 import { ShowSearchBar } from "./ShowSearchBar";
 import { ShowSelectedToggle } from "./ShowSelectedToggle";
@@ -76,6 +82,7 @@ export const ShoppingList = () => {
                   selected
                 ).map((i) => (
                   <ShoppingItem
+                    
                     key={i.id}
                     item={i}
                     check={check}
