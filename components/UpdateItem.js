@@ -4,6 +4,7 @@ import { ScrollView } from "react-native";
 import { Button, Card, TextInput } from "react-native-paper";
 import {
   AppContext,
+  deleteItem,
   hideItem,
   insertList,
   updateItem,
@@ -78,6 +79,15 @@ export const UpdateItem = () => {
             }}
           >
             CANCEL
+          </Button>
+
+          <Button
+            onPress={() => {
+              deleteItem(dispatch, context.item);
+              hideItem(dispatch);
+            }}
+          >
+            DELETE
           </Button>
         </ScrollView>
       </Card.Content>

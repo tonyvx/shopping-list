@@ -13,12 +13,9 @@ export const update = async (sql, data = []) => {
         sql,
         data,
         function (tx, res) {
-          console.log(res);
-
           resolve(res);
         },
         function (tx, err) {
-          console.log(err);
           reject(err);
         }
       );
@@ -36,11 +33,9 @@ export const insert = async (sql, data) => {
         sql,
         data,
         function (tx, res) {
-          console.log(res);
           resolve(res);
         },
         function (tx, err) {
-          console.log(err);
           reject(err);
         }
       );

@@ -22,6 +22,16 @@ export const reducer = (context, action) => {
         ...context,
         list: action.list,
       };
+
+    case "DELETE_ITEM":
+      const afterDeleteList = context.list.map((items) =>
+        items.filter((item) => item.id !== action.item.id)
+      );
+
+      return {
+        ...context,
+        list: afterDeleteList,
+      };
     case "UPDATE_LIST":
       const newList = context.list
         .map((items) => items.filter((item) => item.id !== action.item.id))
@@ -94,17 +104,6 @@ export const setSnackBar = (dispatch, snackbar) =>
   dispatch({ type: "SET_SNACKBAR", snackbar });
 
 export const insertList = async (dispatch, item) => {
-  console.log([
-    uuidv4(),
-    item.title,
-    item.notes || "",
-    item.photo_url || "",
-    item.position || 0,
-    item.active ? 1 : 0,
-    item.completed ? 1 : 0,
-    item.shopping_category_id || "Misc.",
-    item.image || "",
-  ]);
   const updatedItem = await insert(
     "INSERT INTO SHOPPING_LIST (id,title,notes, photo_url, position,active, completed, shopping_category_id, image) VALUES (:id,:title,:notes, :photo_url, :position,:active, :completed, :shopping_category_id, :image)",
     [
@@ -130,17 +129,6 @@ export const hideItem = (dispatch) => {
   dispatch({ type: "HIDE_ITEM", item: null });
 };
 export const updateItem = async (dispatch, item) => {
-  console.log([
-    item.id,
-    item.title,
-    item.notes || "",
-    item.photo_url || "",
-    item.position || 0,
-    item.active ? 1 : 0,
-    item.completed ? 1 : 0,
-    item.shopping_category_id || "Misc.",
-    item.image || "",
-  ]);
   const updatedItem = await update(
     "UPDATE SHOPPING_LIST SET title=:title, notes=:notes, photo_url=:photo_url, position=:position, active=:active, completed=:completed, shopping_category_id=:shopping_category_id, image=:image WHERE id=:id",
     [
@@ -156,4 +144,11 @@ export const updateItem = async (dispatch, item) => {
     ]
   );
   dispatch({ type: "UPDATE_LIST", item });
+};
+
+export const deleteItem = async (dispatch, item) => {
+  const updatedItem = await update("DELETE FROM SHOPPING_LIST WHERE id=:id", [
+    item.id,
+  ]);
+  dispatch({ type: "DELETE_ITEM", item });
 };
