@@ -1,9 +1,10 @@
 import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Appbar, Chip, Searchbar } from "react-native-paper";
-import { AppContext, setList } from "../data/AppContext";
+import { Appbar, Chip, Snackbar } from "react-native-paper";
+import { AppContext, clearSnackBar, setList } from "../data/AppContext";
 import { ShoppingItem } from "./ShoppingItem";
+import { ShowSearchBar } from "./ShowSearchBar";
 import { ShowSelectedToggle } from "./ShowSelectedToggle";
 
 const styles = StyleSheet.create({
@@ -34,29 +35,28 @@ export const ShoppingList = () => {
       : setSelected([...selected, id]);
 
   React.useEffect(() => {
-    // (async () => {
-    //   // if (Platform.OS !== "web") {
-    //   const { status } =
-    //     await ImagePicker.requestMediaLibraryPermissionsAsync();
-    //   if (status !== "granted") {
-    //     alert("Sorry, we need camera roll permissions to make this work!");
-    //   }
-    //   // }
-    // })();
-
     setList(dispatch);
   }, []);
 
   return (
     <View style={{ margin: 16 }}>
+      <Snackbar
+        style={{ width: 20, height: 20 }}
+        visible={!!context.snackbar}
+        onDismiss={() => clearSnackBar(dispatch)}
+        action={{
+          label: "close",
+          onPress: () => {
+            clearSnackBar(dispatch);
+          },
+        }}
+      >
+        {context.snackbar}
+      </Snackbar>
       <Appbar.Header>
         <Appbar.Content title="Shopping List" subtitle="Shop away..." />
       </Appbar.Header>
-      <Searchbar
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-        style={{ width: "80%", alignSelf: "center", margin: 8 }}
-      />
+      <ShowSearchBar {...{ searchQuery, setSearchQuery }} />
       <ShowSelectedToggle {...{ setShowSelected, showSelected }} />
       <ScrollView style={{ height: "70%" }}>
         {list &&
@@ -100,7 +100,7 @@ function showSelectedItems(showSelected, selected, i) {
   return !showSelected || selected.includes(i.id);
 }
 
-function matchesSearch(searchQuery, i) {
+export function matchesSearch(searchQuery, i) {
   return (
     !searchQuery || i.title.toLowerCase().includes(searchQuery.toLowerCase())
   );

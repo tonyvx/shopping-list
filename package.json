@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-picker/picker": "^1.16.1",
     "expo": "~41.0.1",
     "expo-image-picker": "^10.1.4",
     "expo-sqlite": "~9.1.0",
