@@ -9,6 +9,7 @@ import {
   showItem,
   updateItem,
 } from "../data/AppContext";
+import { itemsToBeDisplayed } from "./itemsToBeDisplayed";
 import { ShoppingItem } from "./ShoppingItem";
 import { ShowSearchBar } from "./ShowSearchBar";
 import { ShowSelectedToggle } from "./ShowSelectedToggle";
@@ -39,6 +40,8 @@ export const ShoppingList = () => {
     selected.includes(id)
       ? setSelected(selected.filter((tid) => tid !== id))
       : setSelected([...selected, id]);
+
+ 
 
   React.useEffect(() => {
     setList(dispatch);
@@ -82,7 +85,6 @@ export const ShoppingList = () => {
                   selected
                 ).map((i) => (
                   <ShoppingItem
-                    
                     key={i.id}
                     item={i}
                     check={check}
@@ -95,20 +97,3 @@ export const ShoppingList = () => {
     </View>
   );
 };
-function itemsToBeDisplayed(item, searchQuery, showSelected, selected) {
-  return item.filter(
-    (i) =>
-      matchesSearch(searchQuery, i) &&
-      showSelectedItems(showSelected, selected, i)
-  );
-}
-
-function showSelectedItems(showSelected, selected, i) {
-  return !showSelected || selected.includes(i.id);
-}
-
-export function matchesSearch(searchQuery, i) {
-  return (
-    !searchQuery || i.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-}

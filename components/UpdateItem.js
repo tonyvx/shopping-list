@@ -38,7 +38,7 @@ export const UpdateItem = () => {
       <Card.Title title="About Item" subtitle="Add details here"></Card.Title>
       <Card.Content>
         <ScrollView>
-          {["title", "notes", "photo_url", "position"].map((field) => (
+          {["title", "notes", "photo_url", "position", "shopping_category_id"].map((field) => (
             <TextInput
               style={{ backgroundColor: "white", color: "black" }}
               label={field}

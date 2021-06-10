@@ -7,6 +7,7 @@ export const initialState = {
   list: [],
   snackbar: "",
   item: null,
+  focusItem: null,
 };
 function uuidv4() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -30,6 +31,7 @@ export const reducer = (context, action) => {
 
       return {
         ...context,
+        focusItem: null,
         list: afterDeleteList,
       };
     case "UPDATE_LIST":
@@ -43,6 +45,7 @@ export const reducer = (context, action) => {
 
       return {
         ...context,
+        focusItem: action.item,
         list: newList,
       };
 
@@ -55,6 +58,7 @@ export const reducer = (context, action) => {
 
       return {
         ...context,
+        focusItem: action.item,
         list: addList,
       };
     case "CLEAR_SNACKBAR":

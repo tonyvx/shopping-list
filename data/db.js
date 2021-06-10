@@ -1,6 +1,5 @@
 import * as SQLite from "expo-sqlite";
-// import React, { useState } from "react";
-// import { AppContext, setSnackBar } from "./AppContext";
+import { shoppingList } from "./list";
 
 export const update = async (sql, data = []) => {
   const response = await new Promise((resolve, reject) => {
@@ -54,7 +53,6 @@ export const getItems = () => {
         "CREATE TABLE IF NOT EXISTS SHOPPING_LIST(id VARCHAR(36) PRIMARY KEY NOT NULL, title VARCHAR(30), notes VARCHAR(100),photo_url VARCHAR(30), position INTEGER, active INTEGER,completed INTEGER, shopping_category_id VARCHAR(30), image BLOB)",
         []
       );
-
       txn.executeSql(
         "SELECT * FROM `SHOPPING_LIST`",
         [],
@@ -78,19 +76,21 @@ export const getItems = () => {
   });
 };
 function insertDefaults(txn) {
-  const items = shoppingList.shopping_list_items.map((item) => {
-    return {
-      id: uuidv4(),
-      title: item.title,
-      notes: item.notes,
-      photo_url: item.photo_url,
-      position: item.position,
-      active: item.active ? 1 : 0,
-      completed: item.completed ? 1 : 0,
-      shopping_category_id: item.shopping_category_id,
-      image: item.image,
-    };
-  });
+  const items = shoppingList.shopping_list_items
+    // .reduce((list, items) => [...list, ...items], [])
+    .map((item) => {
+      return {
+        id: item.id,
+        title: item.title,
+        notes: item.notes,
+        photo_url: item.photo_url,
+        position: item.position,
+        active: item.active ? 1 : 0,
+        completed: item.completed ? 1 : 0,
+        shopping_category_id: item.shopping_category_id,
+        image: item.image,
+      };
+    });
   items.forEach((item) =>
     txn.executeSql(
       "INSERT INTO SHOPPING_LIST (id,title,notes, photo_url, position,active, completed, shopping_category_id, image) VALUES (:id,:title,:notes, :photo_url, :position,:active, :completed, :shopping_category_id, :image)",

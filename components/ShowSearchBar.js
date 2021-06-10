@@ -1,8 +1,8 @@
 import React from "react";
-import { View } from "react-native";
+import { Share, View } from "react-native";
 import { Avatar, Button, Searchbar } from "react-native-paper";
 import { AppContext, showItem } from "../data/AppContext";
-import { matchesSearch } from "./ShoppingList";
+import { matchesSearch } from "./itemsToBeDisplayed";
 import { UpdateItem } from "./UpdateItem";
 
 export const ShowSearchBar = ({ searchQuery, setSearchQuery }) => {
@@ -28,10 +28,27 @@ export const ShowSearchBar = ({ searchQuery, setSearchQuery }) => {
             <Avatar.Icon icon="plus" size={48} />
           </Button>
         ) : null}
+        {context.list && (
+          <Button
+            onPress={() => {
+              let shareHistoria = {
+                title: "Shopping List",
+                message: JSON.stringify(
+                  context.list.reduce((list, items) => [...list, ...items], [])
+                ),
+                type: "text/plain",
+                subject: "Sharing shopping list", //  for email
+              };
+
+              // ...after the file is saved, send it to a system share intent
+              Share.share(shareHistoria);
+            }}
+          >
+            <Avatar.Icon icon="upload" size={48} />
+          </Button>
+        )}
       </View>
       <UpdateItem />
     </>
   );
 };
-
-

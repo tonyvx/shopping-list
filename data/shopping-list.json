@@ -1,4 +1,4 @@
-export const shoppingList = {
+{
   id: 1904005,
   guid: "3705C1E9-114C-42DE-A510-C3748F48EF23",
   version: 1622547773,
