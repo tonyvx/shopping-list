@@ -14,3 +14,5 @@ https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid#answer-2117
 
 npx expo build:ios
 
+https://expo.io/accounts/tonyvx/projects/shopping-list/builds
+https://expo.io/turtle-status
