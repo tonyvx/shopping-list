@@ -1,7 +1,8 @@
 import React from "react";
 import { View } from "react-native";
-import { Avatar, Button, Checkbox, Paragraph, Text } from "react-native-paper";
+import { Avatar, Button, Paragraph, Text } from "react-native-paper";
 import { AppContext, showItem } from "../data/AppContext";
+import { CheckboxOutlined } from "./CheckboxOutlined";
 import { UploadImageButton } from "./UploadImageButton";
 
 export const ShoppingItem = ({ item, check, selected }) => {
@@ -23,13 +24,9 @@ export const ShoppingItem = ({ item, check, selected }) => {
       key={item.id}
       ref={itemRef}
     >
-      <Checkbox
-        uncheckedColor="#00aced"
-        color={"#00aced"}
+      <CheckboxOutlined
+        status={selected && selected.includes(item.id)}
         onPress={check(item.id)}
-        status={
-          selected && selected.includes(item.id) ? "checked" : "unchecked"
-        }
       />
       {item.image ? (
         <Avatar.Image
@@ -54,3 +51,5 @@ export const ShoppingItem = ({ item, check, selected }) => {
     </View>
   );
 };
+
+
